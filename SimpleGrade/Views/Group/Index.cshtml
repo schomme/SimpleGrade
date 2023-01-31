@@ -1,0 +1,43 @@
+﻿@model IEnumerable<SimpleGrade.Models.Group>;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Class</h1>
+</div>
+<hr />
+<a class="nav-link text-dark" asp-action="CreateEdit">New Class</a>
+
+<table class="table">
+    <thead>
+        <th>Name</th>
+        <th>Year</th>
+        <th colspan="2">Action</th>
+    </thead>
+    <tbody>
+        @{
+            foreach(var schoolClass in Model){
+            <tr>
+                    <td>@schoolClass.Name</td>
+                    <td>@schoolClass.Year</td>
+                    <td>
+                        <form asp-action="Details" asp-route-id="@schoolClass.Id">
+                            <button class="btn btn-primary" type="submit">Details</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-action="CreateEdit" asp-route-id="@schoolClass.Id">
+                            <button class="btn btn-info" type="submit">Edit</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-action="Delete" asp-route-id="@schoolClass.Id">
+                            <button class="btn btn-danger" type="submit">Delete</button>
+                        </form>
+                    </td>
+            </tr>
+            }   
+        }
+    </tbody>
+</table>

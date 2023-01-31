@@ -6,7 +6,9 @@ namespace SimpleGrade.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        public DbSet<SchoolClass> Classes { get; set; }
+        public DbSet<Group> Groups { get; set; }
+
+        public DbSet<Student> Students { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

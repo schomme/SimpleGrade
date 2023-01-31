@@ -1,0 +1,43 @@
+﻿@model IEnumerable<SimpleGrade.Models.Student>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Student</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<table class="table">
+    <thead>
+        <th>Name</th>
+        <th>Year</th>
+        <th colspan="2">Action</th>
+    </thead>
+    <tbody>
+        @{
+            foreach (var student in Model)
+            {
+                    <tr>
+                    <td>@student.Firstname</td>
+                    <td>@student.Lastname</td>
+                            <td>
+                        <form asp-action="Details" asp-route-id="@student.Id">
+                                    <button class="btn btn-primary" type="submit">Details</button>
+                                </form>
+                            </td>
+                            <td>
+                        <form asp-action="CreateEdit" asp-route-id="@student.Id">
+                                    <button class="btn btn-info" type="submit">Edit</button>
+                                </form>
+                            </td>
+                            <td>
+                        <form asp-action="Delete" asp-route-id="@student.Id">
+                                    <button class="btn btn-danger" type="submit">Delete</button>
+                                </form>
+                            </td>
+                    </tr>
+            }   
+        }
+    </tbody>
+</table>
