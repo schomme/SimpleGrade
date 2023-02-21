@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 
 namespace SimpleGradeClient.ViewModel
 {
-    abstract class ViewModelBase : NotifyPropertyChangedBase
+    public abstract class ViewModelBase : NotifyPropertyChangedBase
     {
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 

@@ -22,7 +22,6 @@ namespace SimpleGradeClient.Model
         public static RootGroup FromJson(string json)
         {
             if (string.IsNullOrEmpty(json)) return _group;
-            GroupBase.All.Clear();
             var settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto, Formatting = Formatting.Indented, ObjectCreationHandling = ObjectCreationHandling.Auto };
             var o = JsonConvert.DeserializeObject<RootGroup>(json, settings) ?? Get();
             _group = o;

@@ -5,27 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleGradeClient"
         xmlns:v="clr-namespace:SimpleGradeClient.ViewModel"
-        xmlns:m="clr-namespace:SimpleGradeClient.Model"
-        xmlns:b="clr-namespace:SimpleGradeClient.Base"
-        xmlns:Commands="clr-namespace:SimpleGradeClient.Commands" x:Class="SimpleGradeClient.MainWindow"
+        x:Class="SimpleGradeClient.MainWindow"
+        xmlns:Control="clr-namespace:SimpleGradeClient.Controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
         <v:MainWindowViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type v:OverViewViewModel}">
+            <Control:OverViewControl/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type v:AddGroupViewModel}">
+            <Control:AddGroupControl/>
+        </DataTemplate>
+    </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Save" CommandParameter="{Binding Groups}">
-                    <MenuItem.Command>
-                        <Commands:SaveCommand/>
-                    </MenuItem.Command>
-                </MenuItem>
-                <MenuItem Header="_Load" CommandParameter="{Binding}">
-                    <MenuItem.Command>
-                        <Commands:LoadCommand/>
-                    </MenuItem.Command>
-                </MenuItem>
+                <MenuItem Header="_Save" Command="{Binding SaveCommand}"/>
+                <MenuItem Header="_Load" Command="{Binding LoadCommand}"/>
             </MenuItem>
         </Menu>
         <Grid>
@@ -41,42 +40,32 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TreeView x:Name="treeView" Grid.RowSpan="4" Grid.Column="1" Width="200" ItemsSource="{Binding Groups.Children, Mode=OneWay}">
-                <TreeView.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="_Add Class" CommandParameter="{Binding Groups}">
-                            <MenuItem.Command>
-                                <Commands:AddGroupCommand/>
-                            </MenuItem.Command>
-                        </MenuItem>
-                    </ContextMenu>
-                </TreeView.ContextMenu>
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
-                        <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=OneWayToSource}"/>
                     </Style>
                 </TreeView.ItemContainerStyle>
+                <TreeView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="_Add Class" Command="{Binding AddGroupCommand}" CommandParameter="{Binding Groups}"/>
+                    </ContextMenu>
+                </TreeView.ContextMenu>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                         <WrapPanel Orientation="Horizontal">
                             <WrapPanel.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="_Add Group" CommandParameter="{Binding}">
-                                        <MenuItem.Command>
-                                            <Commands:AddGroupCommand/>
-                                        </MenuItem.Command>
-                                    </MenuItem>
-                                    <MenuItem Header="_Remove Group" CommandParameter="{Binding}">
-                                        <MenuItem.Command>
-                                            <Commands:RemoveGroupCommand/>
-                                        </MenuItem.Command>
-                                    </MenuItem>
+                                <ContextMenu x:Name="ItemContextMenue">
+                                    <MenuItem Header="_Add Group" Command="{Binding AddGroupCommand}"/>
+                                    <MenuItem Header="_Remove Group" Command="{Binding RemoveGroupCommand}"/>
                                 </ContextMenu>
                             </WrapPanel.ContextMenu>
-                            <TextBlock Text="{Binding Name}"/>
+                            <Image Source="{Binding IconPath}" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding Name}" VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="5,0"/>
                         </WrapPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
+            <ContentControl x:Name="MainView" Content="{Binding SubViewModel}" Grid.RowSpan="4" Grid.Column="2" Margin="10,0,0,0"/>
         </Grid>
     </DockPanel>
 </Window>
