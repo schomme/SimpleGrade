@@ -1,5 +1,4 @@
 ﻿using SimpleGradeClient.Base;
-using System.Collections.ObjectModel;
 
 namespace SimpleGradeClient.ViewModel
 {
@@ -13,8 +12,5 @@ namespace SimpleGradeClient.ViewModel
         }
 
         public GroupBase Group { get => _group; set => SetField(ref _group, value); }
-
-        public ObservableCollection<GroupBase> FlattenList => Group.FlatChildrensList;
-
     }
 }

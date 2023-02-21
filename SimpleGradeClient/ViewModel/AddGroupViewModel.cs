@@ -5,24 +5,24 @@ namespace SimpleGradeClient.ViewModel
 {
     class AddGroupViewModel : ViewModelBase
     {
-        private GroupBase _parent;
-        private GroupBase _group;
+        private GroupViewModel _parent;
+        private GroupViewModel _group;
 
-        public AddGroupViewModel(GroupBase parent)
+        public AddGroupViewModel(GroupViewModel parent)
         {
             _parent = parent;
-            _group = new DefaultGroup();
-            SaveCommand = new RelayCommand(ExecuteSaveCommand);
+            _group = new GroupViewModel(_parent, new DefaultGroup());
+            SaveCommand = new RelayCommand(SaveExecute);
         }
 
-        public GroupBase Group => _group;
-        public GroupBase Parent => _parent;
+        public GroupViewModel Group => _group;
+        public GroupViewModel Parent => _parent;
 
         public RelayCommand SaveCommand { get; }
 
-        private void ExecuteSaveCommand(object? o)
+        private void SaveExecute(object? o)
         {
-            Parent.AddGroupCommand.ExecuteCommand.Invoke(Group);
+            _parent.AddChildGroupCommand.Execute(_group);
         }
     }
 }

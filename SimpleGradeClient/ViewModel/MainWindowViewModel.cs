@@ -10,24 +10,21 @@ namespace SimpleGradeClient.ViewModel
 {
     class MainWindowViewModel : ViewModelBase
     {
-        private RootGroup _Group = RootGroup.Get();
+        private GroupViewModel _Group = new GroupViewModel(null, RootGroup.Get());
         private ViewModelBase? _SubViewModel;
 
         public MainWindowViewModel()
         {
-            TestData();
-
-            AddGroupCommand = new RelayCommand(ExecuteAddGroup);//Groups.AddGroupCommand;
-            RemoveGroupCommand = Groups.RemoveGroupCommand;
             LoadCommand = new RelayCommand(ExecuteLoad);
             SaveCommand = new RelayCommand(ExecuteSave);
+            AddGroupCommand = new RelayCommand(ExecuteAddGroup);
 
-            SubViewModel = new OverViewViewModel(Groups);
+            SubViewModel = new AddGroupViewModel(Groups);
         }
 
         #region Properties
 
-        public RootGroup Groups { get => _Group; set { SetField(ref _Group, value); } }
+        public GroupViewModel Groups { get => _Group; set { SetField(ref _Group, value); } }
         public ViewModelBase SubViewModel { get => _SubViewModel; set => SetField(ref _SubViewModel, value); }
 
         #endregion
@@ -53,7 +50,7 @@ namespace SimpleGradeClient.ViewModel
                 var json = File.ReadAllText(Constants.FilePath) ?? string.Empty;
                 if (string.IsNullOrWhiteSpace(json)) throw new NullReferenceException(Constants.FilePath);
 
-                this.Groups = RootGroup.FromJson(json);
+                //this.Groups = RootGroup.FromJson(json);
             }
             catch (Exception ex)
             {
@@ -84,27 +81,6 @@ namespace SimpleGradeClient.ViewModel
             this.SubViewModel = new AddGroupViewModel(_Group);
         }
         #endregion
-
-        private void TestData()
-        {
-            for (int i = 0; i < 1; i++)
-            {
-                var g1 = new SchoolClass() { Name = $"Class {i}" };
-
-                for (int j = 0; j < 5; j++)
-                {
-                    var g2 = new DefaultGroup() { Name = $"Group {i}.{j}" };
-
-                    for (int k = 0; k < 5; k++)
-                    {
-                        g2.AddChild(new Subject() { Name = $"Group {i}.{j}.{k}" });
-                    }
-
-                    g1.AddChild(g2);
-                }
-                Groups.AddChild(g1);
-            }
-        }
     }
 
 }

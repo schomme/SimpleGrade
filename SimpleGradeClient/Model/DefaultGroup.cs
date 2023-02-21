@@ -7,6 +7,8 @@ namespace SimpleGradeClient.Model
         public DefaultGroup()
         {
             this.IconPath = Icons.Path.Default;
+            this.Name = "Default";
+            this.Description = "Defaultdescription";
         }
     }
 }

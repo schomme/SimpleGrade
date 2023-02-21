@@ -13,11 +13,14 @@
         <v:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
+        
         <DataTemplate DataType="{x:Type v:OverViewViewModel}">
-            <Control:OverViewControl/>
+            
         </DataTemplate>
         <DataTemplate DataType="{x:Type v:AddGroupViewModel}">
             <Control:AddGroupControl/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type v:MainWindowViewModel}">
         </DataTemplate>
     </Window.Resources>
     <DockPanel>
@@ -42,21 +45,20 @@
             <TreeView x:Name="treeView" Grid.RowSpan="4" Grid.Column="1" Width="200" ItemsSource="{Binding Groups.Children, Mode=OneWay}">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
-                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=OneWayToSource}"/>
+                        <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
                     </Style>
                 </TreeView.ItemContainerStyle>
                 <TreeView.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="_Add Class" Command="{Binding AddGroupCommand}" CommandParameter="{Binding Groups}"/>
+                        <MenuItem Header="_Add Class" Command="{Binding AddGroupCommand}"/>
                     </ContextMenu>
                 </TreeView.ContextMenu>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                         <WrapPanel Orientation="Horizontal">
                             <WrapPanel.ContextMenu>
-                                <ContextMenu x:Name="ItemContextMenue">
-                                    <MenuItem Header="_Add Group" Command="{Binding AddGroupCommand}"/>
-                                    <MenuItem Header="_Remove Group" Command="{Binding RemoveGroupCommand}"/>
+                                <ContextMenu>
+                                    <MenuItem Command="{Binding AddGroupCommand}" DataContext=""/>
                                 </ContextMenu>
                             </WrapPanel.ContextMenu>
                             <Image Source="{Binding IconPath}" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
