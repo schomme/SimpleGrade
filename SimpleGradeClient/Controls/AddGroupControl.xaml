@@ -8,6 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="*"/>
@@ -28,6 +29,7 @@
         <Label Content="Description" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="2"/>
         <TextBox Text="{Binding Group.Description}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2"/>
         <Button Content="Save" Command="{Binding SaveCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Column="1" Grid.Row="3" Margin="5"/>
+        <Button Content="Save &amp; Return" Command="{Binding SaveAndExitCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Grid.Column="2" Grid.Row="3" Margin="5"/>
 
     </Grid>
 </UserControl>

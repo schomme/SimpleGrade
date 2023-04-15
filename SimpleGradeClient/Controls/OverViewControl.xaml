@@ -8,6 +8,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <DockPanel>
-        <ListView DockPanel.Dock="Left" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Grid.ColumnSpan="3" ItemsSource="{Binding FlattenList, Mode=OneWay}"/>
+        <ListView DockPanel.Dock="Left" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Grid.ColumnSpan="3" ItemsSource="{Binding Group.AllChildren, Mode=OneWay}"/>
     </DockPanel>
 </UserControl>

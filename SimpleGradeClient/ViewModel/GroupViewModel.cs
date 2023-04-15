@@ -1,12 +1,13 @@
 ﻿using SimpleGradeClient.Base;
 using SimpleGradeClient.Model;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace SimpleGradeClient.ViewModel
 {
-    class GroupViewModel : NotifyPropertyChangedBase
+    public class GroupViewModel : NotifyPropertyChangedBase
     {
         private GroupViewModel? _parent;
         private GroupBase _group;
@@ -45,7 +46,8 @@ namespace SimpleGradeClient.ViewModel
         }
         public GroupViewModel? Parent { get => _parent; private set => SetField(ref _parent, value); }
         public ObservableCollection<GroupViewModel> Children => _children.Value;
-        public bool IsSelected { get => _isSelected; set => SetField(ref _isSelected, value); }
+        public bool IsSelected { get => _isSelected; set => SetField(ref _isSelected, value, nameof(Children)); }
+        public List<GroupViewModel> AllChildren => GetChildrenRecursive();
         public RelayCommand AddChildGroupCommand { get; }
         public GroupViewModel(GroupViewModel? parent, GroupBase group)
         {
@@ -76,6 +78,22 @@ namespace SimpleGradeClient.ViewModel
                 this.Children.Add(new GroupViewModel(this, new DefaultGroup()));
             }
 
+        }
+        private List<GroupViewModel> GetChildrenRecursive()
+        {
+            var list = new HashSet<GroupViewModel>(Children);
+            foreach (var child in Children)
+            {
+                foreach (var subchild in child.GetChildrenRecursive())
+                {
+                    list.Add(subchild);
+                }
+            }
+            return list.ToList();
+        }
+        public override string ToString()
+        {
+            return _group.ToString();
         }
     }
 }

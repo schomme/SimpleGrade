@@ -15,7 +15,7 @@
     <Window.Resources>
         
         <DataTemplate DataType="{x:Type v:OverViewViewModel}">
-            
+            <Control:OverViewControl/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type v:AddGroupViewModel}">
             <Control:AddGroupControl/>
@@ -42,31 +42,27 @@
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TreeView x:Name="treeView" Grid.RowSpan="4" Grid.Column="1" Width="200" ItemsSource="{Binding Groups.Children, Mode=OneWay}">
-                <TreeView.ItemContainerStyle>
-                    <Style TargetType="{x:Type TreeViewItem}">
-                        <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
-                    </Style>
-                </TreeView.ItemContainerStyle>
-                <TreeView.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="_Add Class" Command="{Binding AddGroupCommand}"/>
-                    </ContextMenu>
-                </TreeView.ContextMenu>
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                        <WrapPanel Orientation="Horizontal">
-                            <WrapPanel.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Command="{Binding AddGroupCommand}" DataContext=""/>
-                                </ContextMenu>
-                            </WrapPanel.ContextMenu>
-                            <Image Source="{Binding IconPath}" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{Binding Name}" VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="5,0"/>
-                        </WrapPanel>
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>
+            <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Width="200">
+                <Menu>
+                    <MenuItem Header="_Add" Command="{Binding AddGroupCommand}"/>
+                    <MenuItem Header="_Remove" Command="{Binding RemoveGroupCommand}"/>
+                </Menu>
+                <TreeView ItemsSource="{Binding Groups.Children, Mode=OneWay}">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                            <WrapPanel Orientation="Horizontal">
+                                <Image Source="{Binding IconPath}" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding Name}" VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="5,0"/>
+                            </WrapPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </StackPanel>
             <ContentControl x:Name="MainView" Content="{Binding SubViewModel}" Grid.RowSpan="4" Grid.Column="2" Margin="10,0,0,0"/>
         </Grid>
     </DockPanel>

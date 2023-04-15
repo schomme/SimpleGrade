@@ -4,28 +4,35 @@ using SimpleGradeClient.Model;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows;
 
 namespace SimpleGradeClient.ViewModel
 {
-    class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase
     {
         private GroupViewModel _Group = new GroupViewModel(null, RootGroup.Get());
         private ViewModelBase? _SubViewModel;
+        private ViewManagerViewModel _viewManagerViewModel;
 
         public MainWindowViewModel()
         {
             LoadCommand = new RelayCommand(ExecuteLoad);
             SaveCommand = new RelayCommand(ExecuteSave);
-            AddGroupCommand = new RelayCommand(ExecuteAddGroup);
-
-            SubViewModel = new AddGroupViewModel(Groups);
+            AddGroupCommand = new RelayCommand(ExecuteAddGroupView);
+            RemoveGroupCommand = new RelayCommand(ExecuteRemoveGroup);
+            //SubViewModel = new AddGroupViewModel(Groups);
+            SubViewModel = new OverViewViewModel(_Group);
+            _viewManagerViewModel = new ViewManagerViewModel(this);
+            _Group.IsSelected = true;
         }
+
 
         #region Properties
 
         public GroupViewModel Groups { get => _Group; set { SetField(ref _Group, value); } }
         public ViewModelBase SubViewModel { get => _SubViewModel; set => SetField(ref _SubViewModel, value); }
+        public GroupViewModel SelectedGroup => Groups.AllChildren.FirstOrDefault(i => i.IsSelected) ?? Groups;
 
         #endregion
 
@@ -35,7 +42,6 @@ namespace SimpleGradeClient.ViewModel
         public RelayCommand RemoveGroupCommand { get; }
         public RelayCommand LoadCommand { get; }
         public RelayCommand SaveCommand { get; }
-
 
 
         #endregion
@@ -76,9 +82,27 @@ namespace SimpleGradeClient.ViewModel
             }
         }
 
-        private void ExecuteAddGroup(object? o)
+        private void ExecuteAddGroupView(object? _)
         {
-            this.SubViewModel = new AddGroupViewModel(_Group);
+            _viewManagerViewModel.SetSubViewAddGroup(SelectedGroup);
+        }
+        private void ExecuteRemoveGroup(object? obj)
+        {
+            var group = SelectedGroup;
+            if (group is null) throw new NullReferenceException("No Group is selected");
+
+            if (group.Children.Any())
+            {
+                var result = MessageBox.Show($"The Group and {group.Children.Count} children will be deleted.", "Delete Group", MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
+                if (result != MessageBoxResult.OK) return;
+            }
+            group.Parent?.Children.Remove(group);
+        }
+
+        public void DeselectAll()
+        {
+            Groups.IsSelected = false;
+            Groups.AllChildren.Where(i => i.IsSelected).Select(i => { i.IsSelected = false; return i; });
         }
         #endregion
     }

@@ -1,16 +1,13 @@
-﻿using SimpleGradeClient.Base;
-
-namespace SimpleGradeClient.ViewModel
+﻿namespace SimpleGradeClient.ViewModel
 {
     public class OverViewViewModel : ViewModelBase
     {
-        private GroupBase _group;
-
-        public OverViewViewModel(GroupBase group)
+        private GroupViewModel _groupViewModel;
+        public OverViewViewModel(GroupViewModel group)
         {
-            _group = group;
+            _groupViewModel = group;
         }
 
-        public GroupBase Group { get => _group; set => SetField(ref _group, value); }
+        public GroupViewModel Group => _groupViewModel;
     }
 }
